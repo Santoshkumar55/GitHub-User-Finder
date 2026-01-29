@@ -67,7 +67,7 @@
   });
 
   function getUser(username) {
-    status.innerText = "Loading... ⏳";
+    status.innerText = "Loading... .";
     profile.innerHTML = "";
 
     fetch("https://api.github.com/users/" + username)
@@ -75,7 +75,7 @@
       .then(data => {
         if (data.message === "Not Found") {
           status.innerText = "";
-          profile.innerHTML = "<p style='color:red'>User Not Found ❌</p>";
+          profile.innerHTML = "<p style='color:red'>User Not Found </p>";
         } else {
           status.innerText = "";
           showUser(data);
@@ -97,4 +97,5 @@
 </script>
 
 </body>
+
 </html>
