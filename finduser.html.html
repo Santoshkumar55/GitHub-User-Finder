@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GitHub User Finder</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(135deg, #1d2671, #c33764);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      width: 350px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .card {
+      background: white;
+      color: black;
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    img {
+      width: 90px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>GitHub User Finder</h2>
+
+    <input type="text" id="search" placeholder="Enter username & press Enter">
+    <p id="status"></p>
+    <div id="profile"></div>
+  </div>
+<script>
+  let search = document.getElementById("search");
+  let profile = document.getElementById("profile");
+  let status = document.getElementById("status");
+
+  // Enter key check
+  search.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      let username = search.value;
+
+      if (username !== "") {
+        getUser(username);
+      }
+    }
+  });
+
+  function getUser(username) {
+    status.innerText = "Loading... ⏳";
+    profile.innerHTML = "";
+
+    fetch("https://api.github.com/users/" + username)
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === "Not Found") {
+          status.innerText = "";
+          profile.innerHTML = "<p style='color:red'>User Not Found ❌</p>";
+        } else {
+          status.innerText = "";
+          showUser(data);
+        }
+      });
+  }
+
+  function showUser(user) {
+    profile.innerHTML = `
+      <div class="card">
+        <img src="${user.avatar_url}">
+        <h3>${user.name || "No Name"}</h3>
+        <p>${user.bio || "No Bio"}</p>
+        <p>Joined: ${new Date(user.created_at).toDateString()}</p>
+        <a href="${user.html_url}" target="_blank">Visit Profile</a>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>
